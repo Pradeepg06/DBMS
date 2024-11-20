@@ -113,10 +113,13 @@ WHERE sal >(select avg(sal)
 			from Employee);
             
  /*Query 8: Find the name of the second top level managers of each department */           
-SELECT e.dept_no, e.e_name AS second_top_level_manager
-FROM Employee e
-WHERE e.mgr_no IN (SELECT emp_no FROM Employee WHERE mgr_no IS NOT NULL)
-AND e.mgr_no != (SELECT mgr_no FROM Employee WHERE dept_no = e.dept_no LIMIT 1);
+SELECT dept_no, e_name AS Second_Top_Level_Manager, sal
+FROM (
+    SELECT dept_no, e_name, sal, 
+           RANK() OVER (PARTITION BY dept_no ORDER BY sal DESC) AS salary_rank
+    FROM Employee
+) ranked_employees
+WHERE salary_rank = 2;
 
 /*Query 9. Find the employee details who got second maximum incentive in January 2024.*/
 SELECT e.emp_no, e.e_name, e.sal, incentive_amount, i.incentive_date
