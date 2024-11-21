@@ -55,13 +55,34 @@ where reg_num = 'KA344455' And report_num = 13;
 insert into accident values (16,"2024-06-10","ullal");
 
 /*display driven id with damage amount >= rupees 25000*/
-select distinct driven_id
+select distinct driver_id
 from participated
 where damage_amount >= 25000;
 
+/*Additional Queries:*/
 
+/* Query 01: List the entire participated relation in the descending order of damage amount.*/
+SELECT * 
+FROM PARTICIPATED 
+ORDER BY DAMAGE_AMOUNTT DESC;
 
+/* Query 02: Find the average damage amount. */
+SELECT AVG(DAMAGE_AMOUNTT) 
+FROM PARTICIPATED;
 
+/* Query 03: Delete the tuple whose damage amount is below the average damage amount. */
+DELETE FROM PARTICIPATED 
+WHERE DAMAGE_AMOUNTT < (SELECT AVG (DAMAGE_AMOUNT) 
+FROM PARTICIPATED);
 
+/* Query 04: List the name of drivers whose damage is greater than the average damage amount.*/
+SELECT NAME 
+FROM PERSON A, PARTICIPATED B 
+WHERE A.DRIVER_ID = B.DRIVER_ID AND
+DAMAGE_AMOUNT > (SELECT AVG(DAMAGE_AMOUNT) 
+FROM PARTICIPATED);
 
+/* Query 05: Find maximum damage amount. */
+SELECT MAX(DAMAGE_AMOUNT) 
+FROM PARTICIPATED;
 
